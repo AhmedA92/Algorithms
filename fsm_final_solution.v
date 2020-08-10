@@ -1,4 +1,5 @@
-//Moore FSM Solution for the problem in the link
+//Moore FSM Solution for Synchronous HDLC Framing 
+//The problem description in the following link
 //https://hdlbits.01xz.net/wiki/Fsm_hdlc
 
 module top_module(
