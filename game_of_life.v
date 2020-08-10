@@ -1,5 +1,6 @@
 //-----------------------------------------------------------------------------------------------
 //game of life 16x16 toroid grid Solution
+//https://hdlbits.01xz.net/wiki/Conwaylife
 
 module top_module(
     input clk,
