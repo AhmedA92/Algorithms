@@ -13,13 +13,13 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity PE is Port (a : in signed(7 downto 0);
-                   b : in signed(7 downto 0); 
-                   clk : in std_logic;
-                   rst : in std_logic;
-                   cell_val : out std_logic_vector (15 downto 0);
-                   a_out : out signed(7 downto 0); 
-                   b_out : out signed(7 downto 0));
+entity PE is Port (a : in signed(7 downto 0);                         --First Input / signed 8 bit value.
+                   b : in signed(7 downto 0);                         --Second Input / signed 8 bit value. 
+                   clk : in std_logic;                                --clock
+                   rst : in std_logic;                                --reset
+                   cell_val : out std_logic_vector (15 downto 0);     --The final calculated value of the cell to be saved in external memory to directly to the o/p.
+                   a_out : out signed(7 downto 0);                    --The propagated first input.   
+                   b_out : out signed(7 downto 0));                   --The propagated second input.   
 end PE;
 
 architecture Behavioral of PE is
