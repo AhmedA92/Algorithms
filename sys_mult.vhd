@@ -37,7 +37,32 @@ signal C41_a , C42_a ,C43_a ,C44_a : signed(7 downto 0); --no "b" as this is the
 type memory is array (0 to 15) of std_logic_vector (15 downto 0);    
 signal comp_array : memory;
 
+--internal counter
+signal count : integer := 0;
+signal rev_count : integer := 15;
+
 begin
+ 
+process (clk) begin
+    if(rst  = '1') then 
+        c_out <= "0000000000000000";
+        count <= 0;
+    else
+        if rising_edge(clk)then
+            if (count < 10) then
+                count <= count + 1;
+            end if;    
+            if (rev_count >= 0) and (count = 10) then
+                c_out <= comp_array(15 - rev_count);
+                rev_count <= rev_count - 1;     
+            else if rev_count = 0 then
+                c_out <= "0000000000000000";   
+            end if;
+            end if;
+        end if; 
+    end if; 
+       
+end process;    
 ---------------First Row-------------------------------
 PE_C11: PE port map (a => a_in(7 downto 0),
                      b => b_in(7 downto 0),
@@ -149,5 +174,6 @@ PE_C44: PE port map (a => C43_a,
                      clk => clk,
                      rst => rst,
                      cell_val => comp_array(15),
-                     a_out => C44_a);                                                                                                                                                                                                                                                                        
+                     a_out => C44_a);     
+                                                                                                                                                                                                                                                                                                          
 end Behavioral;
