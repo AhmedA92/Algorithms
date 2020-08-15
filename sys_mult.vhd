@@ -10,8 +10,8 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity sys_mult is Port (a_in : in signed(31 downto 0);
-                         b_in : in signed(31 downto 0);
+entity sys_mult is Port (a_in : in std_logic_vector(31 downto 0);
+                         b_in : in std_logic_vector(31 downto 0);
                          clk, rst : in std_logic;
                          c_out : out std_logic_vector (15 downto 0));
 end sys_mult;
@@ -64,36 +64,36 @@ process (clk) begin
        
 end process;    
 ---------------First Row-------------------------------
-PE_C11: PE port map (a => a_in(7 downto 0),
-                     b => b_in(7 downto 0),
+PE_C11: PE port map (a => signed(a_in(7 downto 0)),
+                     b => signed(b_in(7 downto 0)),
                      clk => clk,
                      rst => rst,
                      cell_val => comp_array(0),
                      a_out => C11_a, 
                      b_out => C11_b);                    
 PE_C12: PE port map (a => C11_a,
-                     b => b_in(15 downto 8),
+                     b => signed(b_in(15 downto 8)),
                      clk => clk,
                      rst => rst,
                      cell_val => comp_array(1),
                      a_out => C12_a, 
                      b_out => C12_b);                    
 PE_C13: PE port map (a => C12_a,
-                     b => b_in(23 downto 16),
+                     b => signed(b_in(23 downto 16)),
                      clk => clk,
                      rst => rst,
                      cell_val => comp_array(2),
                      a_out => C13_a, 
                      b_out => C13_b);  
 PE_C14: PE port map (a => C13_a,
-                     b => b_in(31 downto 24),
+                     b => signed(b_in(31 downto 24)),
                      clk => clk,
                      rst => rst,
                      cell_val => comp_array(3),
                      a_out => C14_a, 
                      b_out => C14_b);                      
 ---------------Second Row-------------------------------     
-PE_C21: PE port map (a => a_in(15 downto 8),
+PE_C21: PE port map (a => signed(a_in(15 downto 8)),
                      b => C11_b,
                      clk => clk,
                      rst => rst,
@@ -122,7 +122,7 @@ PE_C24: PE port map (a => C23_a,
                      a_out => C24_a, 
                      b_out => C24_b);    
 ---------------Third Row-------------------------------   
-PE_C31: PE port map (a => a_in(23 downto 16),
+PE_C31: PE port map (a => signed(a_in(23 downto 16)),
                      b => C21_b,
                      clk => clk,
                      rst => rst,
@@ -151,7 +151,7 @@ PE_C34: PE port map (a => C33_a,
                      a_out => C34_a, 
                      b_out => C34_b); 
 ---------------Fourth Row------------------------------- 
-PE_C41: PE port map (a => a_in(31 downto 24),
+PE_C41: PE port map (a => signed(a_in(31 downto 24)),
                      b => C31_b,
                      clk => clk,
                      rst => rst,
