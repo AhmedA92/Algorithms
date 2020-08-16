@@ -1,3 +1,27 @@
+-------------------------------------------------------------------------------------------------------------
+--A Systolic Array For 4x4 Matrix Multiplication, of Word Size 8 Bits Signed Numbers In Exactly 10 Cycles.
+--The A & B Inputs Must Follow The Following Pattern of Inputs.
+--The Inputs Formate However, are Standard Vectors Where The Signed Numbers Are Concatenated. 
+--------------------------------------------------------------------------------------------------------------
+-- The Module Has 2 Arrays --> Comp_array: For Computation and Accumelation Purposes.
+--                         |-> ans_array: An Array For Storing The Final Answer For The Matrix Multiplication.
+---------------------------------------------------------------------------------------------------------------
+--For The Sake Of Flexibility, The Module output "c_out" Is Not Connected To Anything.
+--It Can Be Changed In The Future For Serial Output.
+--In Simulation, You Can Directly Check The Values In "ans_array" At The Tenth Clock Cycle (count = 10), Where The Values Will Stay There Until The Reset Signal "rst" is Set High.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--                                                  B14
+--                                              B13 B24
+--                                          B12 B23 B34
+--                                      B11 B22 B33 B44
+--                                      B31 B32 B43 0
+--                                      B41 B42 0   0   
+--                                      B41 0   0   0  
+--                  A11 A12 A13 A14 
+--             A21  A22 A23 A24 0
+--        A31  A32  A33 A34 0   0
+--   A41  A42  A43  A44 0   0   0
+    
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -33,7 +57,7 @@ signal C21_a, C21_b , C22_a, C22_b ,C23_a, C23_b ,C24_a, C24_b : signed(7 downto
 signal C31_a, C31_b , C32_a, C32_b ,C33_a, C33_b ,C34_a, C34_b : signed(7 downto 0);
 signal C41_a , C42_a ,C43_a ,C44_a : signed(7 downto 0); --no "b" as this is the last row.
 
--- block memory to save the final value of matrix multiplication.
+-- 2 block memories to accumelate the values and the second memory to save the final value of matrix multiplication.
 type memory is array (0 to 15) of std_logic_vector (15 downto 0);    
 signal comp_array,ans_memory : memory := (X"0000",X"0000",X"0000",X"0000",
                                           X"0000",X"0000",X"0000",X"0000",
@@ -42,7 +66,6 @@ signal comp_array,ans_memory : memory := (X"0000",X"0000",X"0000",X"0000",
 
 --internal counter
 signal count : integer := 0;
-signal rev_count : integer := 15;
 
 begin
  
