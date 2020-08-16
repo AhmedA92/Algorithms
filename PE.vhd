@@ -25,7 +25,7 @@ end PE;
 architecture Behavioral of PE is
 -- System Signals
 signal accum : signed(15 downto 0);
-signal val : std_logic_vector (15 downto 0);
+
 begin
 
 process (clk) begin
@@ -36,11 +36,10 @@ process (clk) begin
             accum <= accum + a*b;
             a_out <= a;
             b_out <= b;
-            --val <= std_logic_vector(accum); -- value will be registered in the next clock cycle
+            
         end if;
     end if;
-    
---cell_val <= val;   
+     
 end process;
 cell_val <= std_logic_vector(accum); 
 end Behavioral;
