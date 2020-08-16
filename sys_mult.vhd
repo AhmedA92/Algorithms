@@ -35,7 +35,10 @@ signal C41_a , C42_a ,C43_a ,C44_a : signed(7 downto 0); --no "b" as this is the
 
 -- block memory to save the final value of matrix multiplication.
 type memory is array (0 to 15) of std_logic_vector (15 downto 0);    
-signal comp_array : memory;
+signal comp_array,ans_memory : memory := (X"0000",X"0000",X"0000",X"0000",
+                                          X"0000",X"0000",X"0000",X"0000",
+                                          X"0000",X"0000",X"0000",X"0000",
+                                          X"0000",X"0000",X"0000",X"0000");
 
 --internal counter
 signal count : integer := 0;
@@ -47,18 +50,37 @@ process (clk) begin
     if(rst  = '1') then 
         c_out <= "0000000000000000";
         count <= 0;
+               
     else
         if rising_edge(clk)then
             if (count < 10) then
+                if count = 4 then
+                    ans_memory(0) <= comp_array(0);
+                elsif count = 5 then
+                    ans_memory(1) <= comp_array(1);  
+                    ans_memory(4) <= comp_array(4); 
+                elsif count = 6 then   
+                    ans_memory(2) <= comp_array(2);  
+                    ans_memory(5) <= comp_array(5); 
+                    ans_memory(8) <= comp_array(8); 
+                elsif count = 7 then 
+                    ans_memory(3) <= comp_array(3);  
+                    ans_memory(6) <= comp_array(6); 
+                    ans_memory(9) <= comp_array(9);   
+                    ans_memory(12) <= comp_array(12); 
+                elsif count = 8 then 
+                    ans_memory(7) <= comp_array(7);  
+                    ans_memory(10) <= comp_array(10); 
+                    ans_memory(13) <= comp_array(13);    
+                elsif count = 9 then 
+                    ans_memory(11) <= comp_array(11);  
+                    ans_memory(14) <= comp_array(14);     
+                elsif count = 10 then 
+                    ans_memory(15) <= comp_array(15);                
+                end if;
                 count <= count + 1;
             end if;    
-            if (rev_count >= 0) and (count = 10) then
-                c_out <= comp_array(15 - rev_count);
-                rev_count <= rev_count - 1;     
-            else if rev_count = 0 then
-                c_out <= "0000000000000000";   
-            end if;
-            end if;
+
         end if; 
     end if; 
        
