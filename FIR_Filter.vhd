@@ -39,28 +39,27 @@ signal counter : integer;
 
 begin
 
-    process(clk) begin
-        if rst= '1' then
-            D_out <= (others => '0');
-            add(0) <= (others => '0');
-        else    
-        --input_shift_reg(0) <= D_in;
-        mult(0) <= input_shift_reg(0)* coeficients(0);
+process(clk) begin
+    if rst= '1' then
+        D_out <= (others => '0');
+        add(0) <= (others => '0');
+    else  
+ 
+    mult(0) <= input_shift_reg(0)* coeficients(0);
+    
+    if rising_edge(clk) then
         
-        if rising_edge(clk) then
-            
-            input_shift_reg <= input_shift_reg(input_shift_reg'high - 1 downto input_shift_reg'low) & D_in;
-            
-            for i in 1 to taps-1 loop      
-                   
-                mult(i) <= input_shift_reg(i)* coeficients(i);
-                add(i) <= add(i-1) + mult(i);   
-            end loop;
-            end if;
-            D_out <= add(add'high);
-      end if;
-      
-    end process;
+        input_shift_reg <= input_shift_reg(input_shift_reg'high - 1 downto input_shift_reg'low) & D_in;
+        
+        for i in 1 to taps-1 loop      
+            mult(i) <= input_shift_reg(i)* coeficients(i);
+            add(i) <= add(i-1) + mult(i);   
+        end loop;
+    end if;
+        D_out <= add(add'high);
+  end if;
+  
+end process;
     
 
 end Behavioral;
