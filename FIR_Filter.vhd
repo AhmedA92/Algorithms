@@ -26,7 +26,7 @@ type coeficient_type is array (0 to taps-1) of signed(coeff_width-1 downto 0);
 constant coeficients: coeficient_type := (X"F1",X"F3",X"07",X"26",X"42",X"4E",X"42",X"26",X"07",X"F3",X"F1");  
 
 --shift register for the input data.
-type shift_reg_type is array (0 to taps-1) of signed(data_width-1 downto 0);  
+type shift_reg_type is array (taps-1 downto 0) of signed(data_width-1 downto 0);  
 signal input_shift_reg : shift_reg_type;
 
 --2 shift registers to save and shift values calculated from addition and multiplication.
@@ -39,31 +39,28 @@ signal counter : integer;
 
 begin
 
-process (clk) begin
-    if (rst = '1') then
-        D_out <= (others => '0');
-        counter <= 0;
-    else 
+    process(clk) begin
+        if rst= '1' then
+            D_out <= (others => '0');
+            add(0) <= (others => '0');
+        else    
+        --input_shift_reg(0) <= D_in;
+        mult(0) <= input_shift_reg(0)* coeficients(0);
+        
         if rising_edge(clk) then
-
-            if counter = 0 then
-                input_shift_reg(0) <= D_in;
-                mult(0) <= D_in * coeficients(0);   
-                add(0) <= D_in * coeficients(0);
-                counter <= counter + 1;
-            elsif counter < taps then
-                input_shift_reg(counter) <= input_shift_reg(counter-1);
-                mult(counter) <= input_shift_reg(counter) * coeficients(counter);   
-                add(counter) <= mult(counter) + add(counter-1);
-                counter <= counter + 1;
-            else 
-                counter <= 0;        
-            end if;
             
-        end if;    
-        D_out <= add(taps-1);
-    end if;
-
-end process;
+            input_shift_reg <= input_shift_reg(input_shift_reg'high - 1 downto input_shift_reg'low) & D_in;
+            
+            for i in 1 to taps-1 loop      
+                   
+                mult(i) <= input_shift_reg(i)* coeficients(i);
+                add(i) <= add(i-1) + mult(i);   
+            end loop;
+            end if;
+            D_out <= add(add'high);
+      end if;
+      
+    end process;
+    
 
 end Behavioral;
