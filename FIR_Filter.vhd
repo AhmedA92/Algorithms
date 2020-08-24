@@ -1,3 +1,5 @@
+-- Order 10, 11 taps, low pass filter.
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
